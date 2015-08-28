@@ -9,6 +9,6 @@ namespace Sunshine.WebApi.Handlers
 {
     public interface IApiExceptionHandler
     {
-        ApiResponse Handle(Exception exception);
+        ApiResult Handle(Exception exception);
     }
 }

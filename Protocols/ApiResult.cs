@@ -38,6 +38,80 @@ namespace Sunshine.WebApi.Protocols
         bool HasMore { get; }
     }
 
+    /// <summary>
+    /// 仅结果
+    /// </summary>
+    public class ApiResult : IApiResult
+    {
+        public ApiResult() { }
+        public ApiResult(int code, string msg)
+        {
+            this.code = code;
+            this.msg = msg;
+        }
+        /// <summary>
+        /// 响应码
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 提示消息
+        /// </summary>
+        public string msg { get; set; }
+
+        int IApiResult.StatusCode
+        {
+            get { return this.code; }
+        }
+
+        string IApiResult.Message
+        {
+            get { return this.msg; }
+        }
+    }
+
+    /// <summary>
+    /// 结果+数据
+    /// </summary>
+    public class ApiResultWithData : ApiResult, IApiData
+    {
+        public object data { get; set; }
+
+        object IApiData.Data
+        {
+            get { return this.data; }
+        }
+    }
+
+    /// <summary>
+    /// 结果+列表数据
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ApiResultWithDataList<T> : ApiResultWithData, IApiDataList<T>
+    {
+        IEnumerable<T> IApiDataList<T>.Items
+        {
+            get { return (this.data as IEnumerable).Cast<T>(); }
+        }
+    }
+
+    /// <summary>
+    /// 结果+列表数据+翻页
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ApiResultWithPagedDataList<T> : ApiResultWithData, IApiPagedDataList<T>
+    {
+        public bool hasMore { get; set; }
+
+        bool IApiPagedDataList<T>.HasMore
+        {
+            get { return this.hasMore; }
+        }
+
+        IEnumerable<T> IApiDataList<T>.Items
+        {
+            get { return (this.data as IEnumerable).Cast<T>(); }
+        }
+    }
 
     /// <summary>
     /// 
@@ -101,8 +175,9 @@ namespace Sunshine.WebApi.Protocols
     }
 
 
-    public class ApiResponse : ApiResponse<object> {
-        public ApiResponse(int code, string msg) : base(code, msg) { }
+    public class ApiResponse : ApiResponse<object>
+    {
+
         public ApiResponse() { }
     }
 }

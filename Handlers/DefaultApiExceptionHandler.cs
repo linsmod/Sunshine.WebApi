@@ -12,9 +12,9 @@ namespace Sunshine.WebApi.Handlers
     /// </summary>
     public class DefaultApiExceptionHandler : IApiExceptionHandler
     {
-        public ApiResponse Handle(Exception exception)
+        public ApiResult Handle(Exception exception)
         {
-            return new ApiResponse(500, exception.Message);
+            return new ApiResult(500, exception.Message);
         }
     }
 }

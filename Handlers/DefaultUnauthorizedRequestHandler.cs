@@ -10,9 +10,9 @@ namespace Sunshine.WebApi.Handlers
 {
     public class DefaultUnauthorizedRequestHandler : IUnauthorizedRequestHandler
     {
-        public ApiResponse Handle(HttpActionContext ctx)
+        public ApiResult Handle(HttpActionContext ctx)
         {
-            return new ApiResponse(401, "UnauthorizedRequest.");
+            return new ApiResult(401, "UnauthorizedRequest.");
         }
     }
 }

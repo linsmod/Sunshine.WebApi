@@ -13,10 +13,10 @@ namespace Sunshine.WebApi.Handlers
     /// </summary>
     public class DefaultModelStateValidationErrorHandler : IModelStateValidationErrorHandler
     {
-        public virtual ApiResponse Handle(ModelStateDictionary modelState)
+        public virtual ApiResult Handle(ModelStateDictionary modelState)
         {
             var msg = RetrieveErrors(modelState);
-            return new ApiResponse(7001, msg);
+            return new ApiResult(7001, msg);
         }
 
         /// <summary>

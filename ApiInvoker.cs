@@ -115,7 +115,18 @@ namespace Sunshine.WebApi
         public async Task<TResponse> ExecutePost<TResponse, TRequest>(string url, TRequest req)
         {
             var ret = await client.PostAsJsonAsync(url, req);
-            return await ret.Content.ReadAsAsync<TResponse>();
+            var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
+            return resp.data;
+        }
+
+        /// <summary>
+        /// Post方式调用后不获取结果
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public async Task ExecutePost(string url)
+        {
+            await client.PostAsJsonAsync<object>(url, null);
         }
 
         /// <summary>
@@ -141,7 +152,8 @@ namespace Sunshine.WebApi
         public async Task<TResponse> ExecutePost<TResponse>(string url)
         {
             var ret = await client.PostAsync(url, null);
-            return await ret.Content.ReadAsAsync<TResponse>();
+            var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
+            return resp.data;
         }
 
         /// <summary>
