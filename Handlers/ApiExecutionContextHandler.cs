@@ -10,6 +10,8 @@ using System.Web.Http.ModelBinding;
 using System.Net.Http;
 using System.Net;
 using Webdiyer.WebControls.Mvc;
+using Sunshine.WebApi.Infrastructure;
+using Sunshine.WebApi.Extensions;
 namespace Sunshine.WebApi.Handlers
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace Sunshine.WebApi.Handlers
         /// <summary>
         /// 关联的过滤器
         /// </summary>
-        public ActionFilterAttribute AssociateFilter { get; set; }
+        public ApiExecutionFilterAttribute AssociateFilter { get; set; }
 
         /// <summary>
         /// 未认证的处理
@@ -40,7 +42,7 @@ namespace Sunshine.WebApi.Handlers
         /// 构造ApiExecutionContextHandler
         /// </summary>
         /// <param name="attr"></param>
-        public ApiExecutionContextHandler(ActionFilterAttribute attr)
+        public ApiExecutionContextHandler(ApiExecutionFilterAttribute attr)
         {
             ExceptionHandler = new DefaultApiExceptionHandler();
             ModelStateValidationErrorHandler = new DefaultModelStateValidationErrorHandler();
@@ -53,39 +55,40 @@ namespace Sunshine.WebApi.Handlers
         /// <param name="actionContext"></param>
         public void HandleExecutingContext(HttpActionContext ctx)
         {
-            IApiResult result;
+            ApiResponse result;
             if (!ctx.ModelState.IsValid && this.HandleModelStateValidationError(ctx.ModelState, out result))
             {
                 ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, result);
                 return;
             }
-            AssociateFilter.OnActionExecuting(ctx);
+            else
+                AssociateFilter.InvokeBaseOnActionExecuting(ctx);
         }
 
         public void HandleExecutedContext(HttpActionExecutedContext ctx)
         {
-            IApiResult result = new ApiResult();
+            ApiResponse resp = new ApiResponse();
             //如果有模型校验错误就返回
-            if (!ctx.ActionContext.ModelState.IsValid && this.HandleModelStateValidationError(ctx.ActionContext.ModelState, out result))
+            if (!ctx.ActionContext.ModelState.IsValid && this.HandleModelStateValidationError(ctx.ActionContext.ModelState, out resp))
             {
-                ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, result);
+                ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, resp);
                 return;
             }
 
-            AssociateFilter.OnActionExecuted(ctx);
-            if (ctx.Exception != null && this.HandleException(ctx.Exception, out result))
+            AssociateFilter.InvokeBaseOnActionExecuted(ctx);
+            if (ctx.Exception != null && this.HandleException(ctx.Exception, out resp))
             {
-                ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, result);
+                ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, resp);
             }
             else
             {
-                if (ctx.Response.StatusCode == HttpStatusCode.Unauthorized && this.HandleUnauthorizedRequest(ctx.ActionContext, out result))
+                if (ctx.Response.StatusCode == HttpStatusCode.Unauthorized && this.HandleUnauthorizedRequest(ctx.ActionContext, out resp))
                 {
                     return;
                 }
                 else if (ctx.Response.StatusCode != HttpStatusCode.OK && ctx.Response.StatusCode != HttpStatusCode.NoContent)
                 {
-                    result = new ApiResult((int)ctx.Response.StatusCode, ctx.Response.StatusCode.ToString());
+                    resp = new ApiResponse((int)ctx.Response.StatusCode, ctx.Response.StatusCode.ToString());
                 }
                 else
                 {
@@ -95,14 +98,14 @@ namespace Sunshine.WebApi.Handlers
                         var objCnt = (ObjectContent)cnt;
                         if (typeof(IPagedList).IsAssignableFrom(objCnt.ObjectType))
                         {
-                            result = PagedApiResult.FromPagedList((IPagedList)objCnt.Value);
+                            resp = ((IPagedList)objCnt.Value).AsApiResponse();
                         }
                         else
-                            ((ApiResult)result).data = ctx.ActionContext.Response.Content.ReadAsAsync<object>().Result;
+                            ((ApiResponse<object>)resp).data = ctx.ActionContext.Response.Content.ReadAsAsync<object>().Result;
                     }
                 }
             }
-            ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, result);
+            ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, resp);
         }
 
         /// <summary>
@@ -111,7 +114,7 @@ namespace Sunshine.WebApi.Handlers
         /// <param name="exception"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        private bool HandleException(Exception exception, out IApiResult result)
+        private bool HandleException(Exception exception, out ApiResponse result)
         {
 
             if (this.ExceptionHandler != null)
@@ -129,7 +132,7 @@ namespace Sunshine.WebApi.Handlers
         /// <param name="modelState"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        private bool HandleModelStateValidationError(ModelStateDictionary modelState, out IApiResult result)
+        private bool HandleModelStateValidationError(ModelStateDictionary modelState, out ApiResponse result)
         {
             if (this.ModelStateValidationErrorHandler != null)
             {
@@ -146,7 +149,7 @@ namespace Sunshine.WebApi.Handlers
         /// <param name="ctx"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        private bool HandleUnauthorizedRequest(HttpActionContext ctx, out IApiResult result)
+        private bool HandleUnauthorizedRequest(HttpActionContext ctx, out ApiResponse result)
         {
             if (this.UnauthorizedRequestHandler != null)
             {

@@ -10,6 +10,6 @@ namespace Sunshine.WebApi.Handlers
 {
     public interface IUnauthorizedRequestHandler
     {
-        ApiResult Handle(HttpActionContext ctx);
+        ApiResponse Handle(HttpActionContext ctx);
     }
 }

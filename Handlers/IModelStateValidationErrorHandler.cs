@@ -10,6 +10,6 @@ namespace Sunshine.WebApi.Handlers
 {
     public interface IModelStateValidationErrorHandler
     {
-        ApiResult Handle(ModelStateDictionary modelState);
+        ApiResponse Handle(ModelStateDictionary modelState);
     }
 }

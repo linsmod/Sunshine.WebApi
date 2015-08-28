@@ -8,17 +8,52 @@ using Webdiyer.WebControls.Mvc;
 
 namespace Sunshine.WebApi.Protocols
 {
+    /// <summary>
+    /// 表示一般返回结果
+    /// </summary>
     public interface IApiResult
     {
-        int code { get; set; }
-        string msg { get; set; }
+        int StatusCode { get; }
+        string Message { get; }
     }
+
     /// <summary>
-    /// 表示Api应答结果
+    /// 表示返回的数据
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ApiResult<T> : IApiResult
+    public interface IApiData
     {
+        object Data { get; }
+    }
+
+    /// <summary>
+    /// 表示数据列表
+    /// </summary>
+    public interface IApiDataList<T>
+    {
+        IEnumerable<T> Items { get; }
+    }
+
+    public interface IApiPagedDataList<T> : IApiDataList<T>
+    {
+        bool HasMore { get; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ApiResponse<T> : IApiPagedDataList<T>, IApiDataList<T>, IApiData, IApiResult
+    {
+        public ApiResponse(int code, string msg)
+        {
+            this.code = code;
+            this.msg = msg;
+        }
+
+        public ApiResponse()
+        {
+
+        }
         /// <summary>
         /// 响应码
         /// </summary>
@@ -31,48 +66,43 @@ namespace Sunshine.WebApi.Protocols
         /// 数据内容
         /// </summary>
         public T data { get; set; }
-    }
 
-    /// <summary>
-    /// 表示Api应答结果
-    /// </summary>
-    public class ApiResult : ApiResult<Object>, IApiResult
-    {
-        public ApiResult() { }
-        public ApiResult(int code, string msg)
-        {
-            this.code = code;
-            this.msg = msg;
-        }
-    }
-
-    /// <summary>
-    /// 带翻页的Api应答结果
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class PagedApiResult<T> : ApiResult<IEnumerable<T>>, IApiResult
-    {
         /// <summary>
-        /// 是否还有更多数据
+        /// 列表是否有更多数据
         /// </summary>
         public bool hasMore { get; set; }
+
+        object IApiData.Data
+        {
+            get { return this.data; }
+        }
+
+        int IApiResult.StatusCode
+        {
+            get { return this.code; }
+        }
+
+        string IApiResult.Message
+        {
+            get { return this.msg; }
+        }
+
+
+
+        bool IApiPagedDataList<T>.HasMore
+        {
+            get { return this.hasMore; }
+        }
+
+        IEnumerable<T> IApiDataList<T>.Items
+        {
+            get { return (this.data as IEnumerable).Cast<T>(); }
+        }
     }
 
-    public class PagedApiResult : PagedApiResult<object>, IApiResult
-    {
-        public static PagedApiResult FromPagedList(IPagedList source)
-        {
-            var totalPage = GetTotalPageCount(source.TotalItemCount, source.PageSize);
-            return new PagedApiResult
-            {
-                data = source.Cast<object>(),
-                hasMore = totalPage - source.CurrentPageIndex > 0
-            };
-        }
 
-        private static int GetTotalPageCount(int totalItemCount, int pageSize)
-        {
-            return totalItemCount == 0 ? 0 : (int)Math.Ceiling((double)(((double)totalItemCount) / ((double)pageSize)));
-        }
+    public class ApiResponse : ApiResponse<object> {
+        public ApiResponse(int code, string msg) : base(code, msg) { }
+        public ApiResponse() { }
     }
 }
