@@ -29,9 +29,12 @@ namespace Sunshine.WebApi.Handlers
             var errors = new Dictionary<string, string>();
             foreach (KeyValuePair<string, ModelState> keyValue in modelState)
             {
-                errors[keyValue.Key] = string.Join("; ", keyValue.Value.Errors.Select(e => (e.ErrorMessage != "" ? e.ErrorMessage : e.Exception.Message)));
+                if (keyValue.Value.Errors.Any())
+                    errors[keyValue.Key] = string.Join("; ", keyValue.Value.Errors.Select(e => (e.ErrorMessage != "" ? e.ErrorMessage : e.Exception.Message)));
             }
-            var errorString = string.Join("; ", errors.Select(x => string.Format("属性: \"{0}\", 错误信息: \"{1}\"", x.Key, x.Value)));
+            var errorString = string.Join("|",
+                errors.Select(x => !string.IsNullOrEmpty(x.Key) ?
+                    string.Format("{1}（{0}）", x.Key, x.Value) : string.Format("{1}", x.Key, x.Value)));
             return errorString;
         }
     }

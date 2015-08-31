@@ -1,11 +1,8 @@
 ﻿using Sunshine.WebApi.Protocols;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Sunshine.WebApi
@@ -25,6 +22,7 @@ namespace Sunshine.WebApi
         {
             client = new HttpClient();
             client.BaseAddress = new Uri(baseAddress);
+            client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -34,7 +32,6 @@ namespace Sunshine.WebApi
         /// </summary>
         public Uri BaseAddress { get; private set; }
 
-
         /// <summary>
         /// 执行Get获取单个或多个对象
         /// </summary>
@@ -43,7 +40,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<TResponse> ExecuteGet<TResponse>(string url)
         {
-            var ret = await client.GetAsync(url);
+            var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
         }
@@ -56,7 +53,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedGet<TListItem>(string url)
         {
-            var ret = await client.GetAsync(url);
+            var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
             return resp;
         }
@@ -77,7 +74,7 @@ namespace Sunshine.WebApi
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, url);
             message.Content = content;
 
-            var ret = await client.SendAsync(message, HttpCompletionOption.ResponseContentRead);
+            var ret = client.SendAsync(message, HttpCompletionOption.ResponseContentRead).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
         }
@@ -98,11 +95,9 @@ namespace Sunshine.WebApi
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, url);
             message.Content = content;
 
-            var ret = await client.SendAsync(message, HttpCompletionOption.ResponseContentRead);
+            var ret = client.SendAsync(message, HttpCompletionOption.ResponseContentRead).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
         }
-
-
 
         /// <summary>
         /// Post方式调用Api
@@ -114,7 +109,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<TResponse> ExecutePost<TResponse, TRequest>(string url, TRequest req)
         {
-            var ret = await client.PostAsJsonAsync(url, req);
+            var ret = client.PostAsJsonAsync(url, req).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
         }
@@ -139,7 +134,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedPost<TListItem, TRequest>(string url, TRequest req)
         {
-            var ret = await client.PostAsJsonAsync(url, req);
+            var ret = client.PostAsJsonAsync(url, req).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
         }
 
@@ -151,7 +146,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<TResponse> ExecutePost<TResponse>(string url)
         {
-            var ret = await client.PostAsync(url, null);
+            var ret = client.PostAsync(url, null).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
         }
@@ -164,7 +159,7 @@ namespace Sunshine.WebApi
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedPost<TListItem>(string url)
         {
-            var ret = await client.PostAsync(url, null);
+            var ret = client.PostAsync(url, null).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
         }
     }
