@@ -26,4 +26,3 @@ F:\tfs\SevenShop\Sunshine.WeApi\bin\Debug\Webdiyer.MvcPager.pdb
 F:\tfs\SevenShop\Sunshine.WeApi\bin\Debug\Webdiyer.MvcPager.xml
 F:\tfs\SevenShop\Sunshine.WeApi\obj\Debug\Sunshine.WebApi.dll
 F:\tfs\SevenShop\Sunshine.WeApi\obj\Debug\Sunshine.WebApi.pdb
-F:\tfs\SevenShop\Sunshine.WeApi\obj\Debug\Sunshine.WeApi.csprojResolveAssemblyReference.cache

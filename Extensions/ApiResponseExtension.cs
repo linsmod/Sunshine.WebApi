@@ -1,4 +1,4 @@
-﻿using Sunshine.WebApi.Protocols;
+﻿using Sunshine.WebApiLib.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Webdiyer.WebControls.Mvc;
 
-namespace Sunshine.WebApi.Extensions
+namespace Sunshine.WebApiLib.Extensions
 {
     public static class ApiResponseExtension
     {

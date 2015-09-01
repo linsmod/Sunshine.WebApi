@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
 
-namespace Sunshine.WebApi.Infrastructure
+namespace Sunshine.WebApiLib.Infrastructure
 {
     public abstract class ApiExecutionFilterAttribute : ActionFilterAttribute
     {

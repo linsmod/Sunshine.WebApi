@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sunshine.WebApi
+namespace Sunshine.WebApiLib
 {
     /// <summary>
     /// Api 请求

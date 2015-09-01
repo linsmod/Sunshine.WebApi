@@ -1,11 +1,11 @@
-﻿using Sunshine.WebApi.Protocols;
+﻿using Sunshine.WebApiLib.Protocols;
 using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Sunshine.WebApi
+namespace Sunshine.WebApiLib
 {
     /// <summary>
     /// Api调用客户端

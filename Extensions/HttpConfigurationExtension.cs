@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace Sunshine.WebApi.Extensions
+namespace Sunshine.WebApiLib.Extensions
 {
     public static class HttpConfigurationExtension
     {

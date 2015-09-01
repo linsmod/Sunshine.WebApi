@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Webdiyer.WebControls.Mvc;
 
-namespace Sunshine.WebApi.Protocols
+namespace Sunshine.WebApiLib.Protocols
 {
     /// <summary>
     /// 表示一般返回结果

@@ -7,8 +7,8 @@
     <ProjectGuid>{23C3B708-95C5-421F-9F44-E16E2ADAB084}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sunshine.WebApi</RootNamespace>
-    <AssemblyName>Sunshine.WebApi</AssemblyName>
+    <RootNamespace>Sunshine.WebApiLib</RootNamespace>
+    <AssemblyName>Sunshine.WebApiLib</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

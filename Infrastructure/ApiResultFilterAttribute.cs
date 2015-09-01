@@ -1,4 +1,4 @@
-﻿using Sunshine.WebApi.Infrastructure;
+﻿using Sunshine.WebApiLib.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
 
-namespace Sunshine.WebApi.Infrastructure
+namespace Sunshine.WebApiLib.Infrastructure
 {
     /// <summary>
     /// 默认Api结果处理筛选器
@@ -16,10 +16,10 @@ namespace Sunshine.WebApi.Infrastructure
         /// <summary>
         /// 核心处理器
         /// </summary>
-        Sunshine.WebApi.Handlers.ApiExecutionContextHandler Handler { get; set; }
+        Sunshine.WebApiLib.Handlers.ApiExecutionContextHandler Handler { get; set; }
         public DefaultApiResultFilterAttribute()
         {
-            Handler = new Sunshine.WebApi.Handlers.ApiExecutionContextHandler(this);
+            Handler = new Sunshine.WebApiLib.Handlers.ApiExecutionContextHandler(this);
         }
 
         /// <summary>

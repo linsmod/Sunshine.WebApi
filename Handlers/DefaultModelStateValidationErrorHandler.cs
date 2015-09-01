@@ -1,4 +1,4 @@
-﻿using Sunshine.WebApi.Protocols;
+﻿using Sunshine.WebApiLib.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
 
-namespace Sunshine.WebApi.Handlers
+namespace Sunshine.WebApiLib.Handlers
 {
     /// <summary>
     /// 模型校验错误默认处理器
