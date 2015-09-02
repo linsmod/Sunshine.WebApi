@@ -97,6 +97,7 @@
     <Compile Include="ApiRequest.cs" />
     <Compile Include="Extensions\ApiResponseExtension.cs" />
     <Compile Include="Extensions\HttpConfigurationExtension.cs" />
+    <Compile Include="Extensions\ModelStateExtension.cs" />
     <Compile Include="Handlers\ApiExecutionContextHandler.cs" />
     <Compile Include="Handlers\DefaultApiExceptionHandler.cs" />
     <Compile Include="Handlers\DefaultModelStateValidationErrorHandler.cs" />

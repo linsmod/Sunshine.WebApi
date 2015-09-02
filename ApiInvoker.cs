@@ -115,13 +115,44 @@ namespace Sunshine.WebApiLib
         }
 
         /// <summary>
-        /// Post方式调用后不获取结果
+        /// Post方式调用后获取结果,不获取数据
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task ExecutePost(string url)
+        public async Task<ApiResult> ExecutePost(string url)
         {
-            await client.PostAsJsonAsync<object>(url, null);
+            var resp = client.PostAsync(url, null).Result;
+            return await resp.Content.ReadAsAsync<ApiResult>();
+        }
+
+        /// <summary>
+        /// Post方式调用后获取结果，不获取数据
+        /// </summary>
+        /// <typeparam name="TRequest"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public async Task<ApiResult> ExecutePost<TRequest>(string url, TRequest req)
+        {
+            var ret = client.PostAsJsonAsync(url, req).Result;
+            ApiResult result;
+            if (TryHandleException(ret, out result))
+            {
+                return result;
+            }
+            return await ret.Content.ReadAsAsync<ApiResult>();
+        }
+
+        private bool TryHandleException(HttpResponseMessage resp, out ApiResult result)
+        {
+            if (resp.IsSuccessStatusCode)
+            {
+                result = null;
+                return false;
+            }
+            var msg = resp.Content.ReadAsStringAsync().Result;
+            result = new ApiResult(500, msg);
+            return true;
         }
 
         /// <summary>
