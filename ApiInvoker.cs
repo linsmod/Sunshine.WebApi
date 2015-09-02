@@ -111,8 +111,11 @@ namespace Sunshine.WebApiLib
         {
             var ret = client.PostAsJsonAsync(url, req).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
+            if (resp.code != 0)
+                ThrowApiResultException((IApiResult)resp);
             return resp.data;
         }
+
 
         /// <summary>
         /// Post方式调用后获取结果,不获取数据
@@ -153,6 +156,12 @@ namespace Sunshine.WebApiLib
             var msg = resp.Content.ReadAsStringAsync().Result;
             result = new ApiResult(500, msg);
             return true;
+        }
+
+        private void ThrowApiResultException(IApiResult result)
+        {
+            if (result.StatusCode != 0)
+                throw new Exceptions.ApiResultException(result.StatusCode, result.Message);
         }
 
         /// <summary>

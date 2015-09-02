@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
-
+using Sunshine.WebApiLib.Extensions;
 namespace Sunshine.WebApiLib.Handlers
 {
     /// <summary>
@@ -26,16 +26,17 @@ namespace Sunshine.WebApiLib.Handlers
         /// <returns></returns>
         protected virtual string RetrieveErrors(ModelStateDictionary modelState)
         {
-            var errors = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, ModelState> keyValue in modelState)
-            {
-                if (keyValue.Value.Errors.Any())
-                    errors[keyValue.Key] = string.Join("; ", keyValue.Value.Errors.Select(e => (e.ErrorMessage != "" ? e.ErrorMessage : e.Exception.Message)));
-            }
-            var errorString = string.Join("|",
-                errors.Select(x => !string.IsNullOrEmpty(x.Key) ?
-                    string.Format("{1}（{0}）", x.Key, x.Value) : string.Format("{1}", x.Key, x.Value)));
-            return errorString;
+            return modelState.GetFirstError();
+            //var errors = new Dictionary<string, string>();
+            //foreach (KeyValuePair<string, ModelState> keyValue in modelState)
+            //{
+            //    if (keyValue.Value.Errors.Any())
+            //        errors[keyValue.Key] = string.Join("; ", keyValue.Value.Errors.Select(e => (e.ErrorMessage != "" ? e.ErrorMessage : e.Exception.Message)));
+            //}
+            //var errorString = string.Join("|",
+            //    errors.Select(x => !string.IsNullOrEmpty(x.Key) ?
+            //        string.Format("{1}（{0}）", x.Key, x.Value) : string.Format("{1}", x.Key, x.Value)));
+            //return errorString;
         }
     }
 }
