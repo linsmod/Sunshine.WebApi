@@ -1,4 +1,5 @@
-﻿using Sunshine.WebApiLib.Protocols;
+﻿using Sunshine.WebApiLib.Exceptions;
+using Sunshine.WebApiLib.Protocols;
 using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -39,6 +40,7 @@ namespace Sunshine.WebApiLib
         /// <param name="url"></param>
         /// <returns></returns>
         public async Task<TResponse> ExecuteGet<TResponse>(string url)
+            where TResponse : class
         {
             var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
@@ -52,6 +54,7 @@ namespace Sunshine.WebApiLib
         /// <param name="url">请求地址</param>
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedGet<TListItem>(string url)
+            where TListItem : class
         {
             var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
@@ -67,6 +70,8 @@ namespace Sunshine.WebApiLib
         /// <param name="req">提交的内容</param>
         /// <returns></returns>
         public async Task<TResponse> ExecuteGet<TResponse, TRequest>(string url, TRequest req)
+            where TRequest : class
+            where TResponse : class
         {
             MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
             HttpContent content = new ObjectContent<TRequest>(req, jsonFormatter);
@@ -88,6 +93,8 @@ namespace Sunshine.WebApiLib
         /// <param name="req">提交的内容</param>
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedGet<TListItem, TRequest>(string url, TRequest req)
+            where TRequest : class
+            where TListItem : class
         {
             MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
             HttpContent content = new ObjectContent<TRequest>(req, jsonFormatter);
@@ -108,8 +115,16 @@ namespace Sunshine.WebApiLib
         /// <param name="req">提交的内容</param>
         /// <returns></returns>
         public async Task<TResponse> ExecutePost<TResponse, TRequest>(string url, TRequest req)
+            where TRequest : class
+            where TResponse : class
         {
             var ret = client.PostAsJsonAsync(url, req).Result;
+            if (!ret.IsSuccessStatusCode)
+            {
+                var x = ret.Content.ReadAsStringAsync().Result;
+                throw new ApiResultException((int)ret.StatusCode, x);
+            }
+
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             if (resp.code != 0)
                 ThrowApiResultException((IApiResult)resp);
@@ -136,6 +151,7 @@ namespace Sunshine.WebApiLib
         /// <param name="req"></param>
         /// <returns></returns>
         public async Task<ApiResult> ExecutePost<TRequest>(string url, TRequest req)
+            where TRequest : class
         {
             var ret = client.PostAsJsonAsync(url, req).Result;
             ApiResult result;
@@ -173,6 +189,8 @@ namespace Sunshine.WebApiLib
         /// <param name="req">提交的内容</param>
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedPost<TListItem, TRequest>(string url, TRequest req)
+            where TRequest : class
+            where TListItem : class
         {
             var ret = client.PostAsJsonAsync(url, req).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
@@ -185,6 +203,7 @@ namespace Sunshine.WebApiLib
         /// <param name="url">调用地址</param>
         /// <returns></returns>
         public async Task<TResponse> ExecutePost<TResponse>(string url)
+            where TResponse : class
         {
             var ret = client.PostAsync(url, null).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
@@ -198,6 +217,7 @@ namespace Sunshine.WebApiLib
         /// <param name="url">调用地址</param>
         /// <returns></returns>
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedPost<TListItem>(string url)
+            where TListItem : class
         {
             var ret = client.PostAsync(url, null).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();

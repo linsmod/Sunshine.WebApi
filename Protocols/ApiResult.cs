@@ -69,6 +69,8 @@ namespace Sunshine.WebApiLib.Protocols
         {
             get { return this.msg; }
         }
+
+        public static ApiResult Success = new ApiResult();
     }
 
     /// <summary>
