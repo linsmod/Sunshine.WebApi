@@ -17,6 +17,10 @@ namespace Sunshine.WebApiLib.Infrastructure
         /// 核心处理器
         /// </summary>
         Sunshine.WebApiLib.Handlers.ApiExecutionContextHandler Handler { get; set; }
+
+        /// <summary>
+        /// 默认Api结果处理筛选器
+        /// </summary>
         public DefaultApiResultFilterAttribute()
         {
             Handler = new Sunshine.WebApiLib.Handlers.ApiExecutionContextHandler(this);

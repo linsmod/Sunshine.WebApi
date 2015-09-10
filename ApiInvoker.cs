@@ -1,6 +1,7 @@
 ﻿using Sunshine.WebApiLib.Exceptions;
 using Sunshine.WebApiLib.Protocols;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -11,9 +12,11 @@ namespace Sunshine.WebApiLib
     /// <summary>
     /// Api调用客户端
     /// </summary>
-    public class ApiInvoker
+    public abstract class ApiInvoker
     {
         HttpClient client;
+        HttpClientHandler clientHandler;
+        CookieContainer cookieContainer;
 
         /// <summary>
         /// 使用baseAddress构造Api调用客户端
@@ -21,6 +24,8 @@ namespace Sunshine.WebApiLib
         /// <param name="baseAddress"></param>
         public ApiInvoker(string baseAddress)
         {
+            cookieContainer = new CookieContainer();
+            clientHandler = new HttpClientHandler { UseCookies = true, CookieContainer = cookieContainer };
             client = new HttpClient();
             client.BaseAddress = new Uri(baseAddress);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -40,7 +45,9 @@ namespace Sunshine.WebApiLib
         /// <param name="url"></param>
         /// <returns></returns>
         public async Task<TResponse> ExecuteGet<TResponse>(string url)
+             where TResponse : class
         {
+            BindSession();
             var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
@@ -55,6 +62,7 @@ namespace Sunshine.WebApiLib
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedGet<TListItem>(string url)
             where TListItem : class
         {
+            BindSession();
             var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
             return resp;
@@ -72,6 +80,7 @@ namespace Sunshine.WebApiLib
             where TRequest : class
             where TResponse : class
         {
+            BindSession();
             MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
             HttpContent content = new ObjectContent<TRequest>(req, jsonFormatter);
 
@@ -95,6 +104,7 @@ namespace Sunshine.WebApiLib
             where TRequest : class
             where TListItem : class
         {
+            BindSession();
             MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
             HttpContent content = new ObjectContent<TRequest>(req, jsonFormatter);
 
@@ -117,6 +127,7 @@ namespace Sunshine.WebApiLib
             where TRequest : class
             where TResponse : class
         {
+            BindSession();
             var ret = client.PostAsJsonAsync(url, req).Result;
             if (!ret.IsSuccessStatusCode)
             {
@@ -138,6 +149,7 @@ namespace Sunshine.WebApiLib
         /// <returns></returns>
         public async Task<ApiResult> ExecutePost(string url)
         {
+            BindSession();
             var resp = client.PostAsync(url, null).Result;
             return await resp.Content.ReadAsAsync<ApiResult>();
         }
@@ -152,6 +164,7 @@ namespace Sunshine.WebApiLib
         public async Task<ApiResult> ExecutePost<TRequest>(string url, TRequest req)
             where TRequest : class
         {
+            BindSession();
             var ret = client.PostAsJsonAsync(url, req).Result;
             ApiResult result;
             if (TryHandleException(ret, out result))
@@ -191,6 +204,7 @@ namespace Sunshine.WebApiLib
             where TRequest : class
             where TListItem : class
         {
+            BindSession();
             var ret = client.PostAsJsonAsync(url, req).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
         }
@@ -204,6 +218,7 @@ namespace Sunshine.WebApiLib
         public async Task<TResponse> ExecutePost<TResponse>(string url)
             where TResponse : class
         {
+            BindSession();
             var ret = client.PostAsync(url, null).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
@@ -218,8 +233,34 @@ namespace Sunshine.WebApiLib
         public async Task<IApiPagedDataList<TListItem>> ExecutePagedPost<TListItem>(string url)
             where TListItem : class
         {
+            BindSession();
             var ret = client.PostAsync(url, null).Result;
             return await ret.Content.ReadAsAsync<ApiResponse<TListItem>>();
         }
+
+        /// <summary>
+        /// 设置用户会话
+        /// </summary>
+        /// <param name="session">会话ID，如果为null将在客户端移除会话ID</param>
+        public void SetSession(string session)
+        {
+            if (session == null)
+            {
+                client.DefaultRequestHeaders.Authorization = null;
+            }
+            else
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Session", session);
+        }
+
+
+        /// <summary>
+        /// 绑定会话Id
+        /// </summary>
+        private void BindSession() {
+            var sid = this.GetSessionId();
+            this.SetSession(sid);
+        }
+
+        public abstract string GetSessionId();
     }
 }

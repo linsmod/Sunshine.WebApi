@@ -70,7 +70,15 @@ namespace Sunshine.WebApiLib.Protocols
             get { return this.msg; }
         }
 
+        /// <summary>
+        /// 0 for success request
+        /// </summary>
         public static ApiResult Success = new ApiResult();
+
+        /// <summary>
+        /// 401 for unauthorized request
+        /// </summary>
+        public static ApiResult Unauthorized = new ApiResult(401, "Unauthorized");
     }
 
     /// <summary>

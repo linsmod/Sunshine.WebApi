@@ -51,6 +51,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -107,6 +108,12 @@
     <Compile Include="Handlers\IModelStateValidationErrorHandler.cs" />
     <Compile Include="Handlers\IUnauthorizedRequestHandler.cs" />
     <Compile Include="Infrastructure\ApiResultFilterAttribute.cs" />
+    <Compile Include="Infrastructure\Authorization\ApiAuthorizationIdentityBinding.cs" />
+    <Compile Include="Infrastructure\Authorization\DefaultApiUserAuthorizeAttribute.cs" />
+    <Compile Include="Infrastructure\Authorization\DefaultApiUserIdBinding.cs" />
+    <Compile Include="Infrastructure\Authorization\MvcAuthorizationIdentityBinding.cs" />
+    <Compile Include="Infrastructure\Authorization\DefaultMvcUserAuthorizeAttribute.cs" />
+    <Compile Include="Infrastructure\Authorization\DefaultMvcUserIdBinding.cs" />
     <Compile Include="Infrastructure\IApiExecutionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocols\ApiResult.cs" />
