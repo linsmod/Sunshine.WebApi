@@ -40,7 +40,6 @@ namespace Sunshine.WebApiLib
         /// <param name="url"></param>
         /// <returns></returns>
         public async Task<TResponse> ExecuteGet<TResponse>(string url)
-            where TResponse : class
         {
             var ret = client.GetAsync(url).Result;
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();

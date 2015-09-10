@@ -105,6 +105,10 @@ namespace Sunshine.WebApiLib.Handlers
                             result.data = x.data;
                             ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, result);
                         }
+                        else if (objCnt.ObjectType.Equals(typeof(ApiResult)))
+                        {
+                            ctx.Response = ctx.Request.CreateResponse(HttpStatusCode.OK, objCnt);
+                        }
                         else
                         {
                             var result = new ApiResultWithData()
