@@ -8,7 +8,7 @@ using System.Web.Http.Controllers;
 
 namespace Sunshine.WebApiLib.Handlers
 {
-    public class DefaultUnauthorizedRequestHandler : IUnauthorizedRequestHandler
+    public class ApiUnauthorizedRequestHandler : IApiUnauthorizedRequestHandler
     {
         public ApiResult Handle(HttpActionContext ctx)
         {

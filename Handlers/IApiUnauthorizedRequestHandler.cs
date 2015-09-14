@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http.ModelBinding;
+using System.Web.Http.Controllers;
 
 namespace Sunshine.WebApiLib.Handlers
 {
-    public interface IModelStateValidationErrorHandler
+    public interface IApiUnauthorizedRequestHandler
     {
-        ApiResult Handle(ModelStateDictionary modelState);
+        ApiResult Handle(HttpActionContext ctx);
     }
 }

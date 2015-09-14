@@ -97,16 +97,19 @@
     <Compile Include="ApiInvoker.cs" />
     <Compile Include="ApiRequest.cs" />
     <Compile Include="Exceptions\ApiResultException.cs" />
+    <Compile Include="Exceptions\EfException.cs" />
     <Compile Include="Extensions\ApiResponseExtension.cs" />
     <Compile Include="Extensions\HttpConfigurationExtension.cs" />
     <Compile Include="Extensions\ModelStateExtension.cs" />
     <Compile Include="Handlers\ApiExecutionContextHandler.cs" />
-    <Compile Include="Handlers\DefaultApiExceptionHandler.cs" />
-    <Compile Include="Handlers\DefaultModelStateValidationErrorHandler.cs" />
-    <Compile Include="Handlers\DefaultUnauthorizedRequestHandler.cs" />
+    <Compile Include="Handlers\ApiExceptionHandler.cs" />
+    <Compile Include="Handlers\ApiUnauthorizedRequestHandler.cs" />
+    <Compile Include="Handlers\ApiModelStateValidationErrorHandler.cs" />
+    <Compile Include="Handlers\MvcHttpContextHandlers.cs" />
     <Compile Include="Handlers\IApiExceptionHandler.cs" />
-    <Compile Include="Handlers\IModelStateValidationErrorHandler.cs" />
-    <Compile Include="Handlers\IUnauthorizedRequestHandler.cs" />
+    <Compile Include="Handlers\IApiModelStateValidationErrorHandler.cs" />
+    <Compile Include="Handlers\IApiUnauthorizedRequestHandler.cs" />
+    <Compile Include="Infrastructure\MvcExecutionFilter.cs" />
     <Compile Include="Infrastructure\ApiResultFilterAttribute.cs" />
     <Compile Include="Infrastructure\Authorization\ApiAuthorizationIdentityBinding.cs" />
     <Compile Include="Infrastructure\Authorization\DefaultApiUserAuthorizeAttribute.cs" />
@@ -114,7 +117,7 @@
     <Compile Include="Infrastructure\Authorization\MvcAuthorizationIdentityBinding.cs" />
     <Compile Include="Infrastructure\Authorization\DefaultMvcUserAuthorizeAttribute.cs" />
     <Compile Include="Infrastructure\Authorization\DefaultMvcUserIdBinding.cs" />
-    <Compile Include="Infrastructure\IApiExecutionFilter.cs" />
+    <Compile Include="Infrastructure\ApiExecutionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocols\ApiResult.cs" />
   </ItemGroup>

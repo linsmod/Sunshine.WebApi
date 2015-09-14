@@ -43,15 +43,5 @@ namespace Sunshine.WebApiLib.Infrastructure
         {
             Handler.HandleExecutedContext(actionExecutedContext);
         }
-
-        public override void InvokeBaseOnActionExecuting(System.Web.Http.Controllers.HttpActionContext actionContext)
-        {
-            base.OnActionExecuting(actionContext);
-        }
-
-        public override void InvokeBaseOnActionExecuted(HttpActionExecutedContext actionExecutedContext)
-        {
-            base.OnActionExecuted(actionExecutedContext);
-        }
     }
 }

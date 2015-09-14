@@ -11,7 +11,7 @@ namespace Sunshine.WebApiLib.Handlers
     /// <summary>
     /// 模型校验错误默认处理器
     /// </summary>
-    public class DefaultModelStateValidationErrorHandler : IModelStateValidationErrorHandler
+    public class ApiModelStateValidationErrorHandler : IApiModelStateValidationErrorHandler
     {
         public virtual ApiResult Handle(ModelStateDictionary modelState)
         {

@@ -256,11 +256,16 @@ namespace Sunshine.WebApiLib
         /// <summary>
         /// 绑定会话Id
         /// </summary>
-        private void BindSession() {
+        private void BindSession()
+        {
             var sid = this.GetSessionId();
             this.SetSession(sid);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public abstract string GetSessionId();
     }
 }

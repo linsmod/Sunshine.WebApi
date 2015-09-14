@@ -27,7 +27,7 @@ namespace Sunshine.WebApiLib.Handlers
         /// <summary>
         /// 未认证的处理
         /// </summary>
-        public IUnauthorizedRequestHandler UnauthorizedRequestHandler { get; set; }
+        public IApiUnauthorizedRequestHandler UnauthorizedRequestHandler { get; set; }
 
         /// <summary>
         /// 异常处理
@@ -36,7 +36,7 @@ namespace Sunshine.WebApiLib.Handlers
         /// <summary>
         /// 模型验证错误处理
         /// </summary>
-        public IModelStateValidationErrorHandler ModelStateValidationErrorHandler { get; set; }
+        public IApiModelStateValidationErrorHandler ModelStateValidationErrorHandler { get; set; }
 
         /// <summary>
         /// 构造ApiExecutionContextHandler
@@ -44,9 +44,9 @@ namespace Sunshine.WebApiLib.Handlers
         /// <param name="attr"></param>
         public ApiExecutionContextHandler(ApiExecutionFilterAttribute attr)
         {
-            ExceptionHandler = new DefaultApiExceptionHandler();
-            ModelStateValidationErrorHandler = new DefaultModelStateValidationErrorHandler();
-            UnauthorizedRequestHandler = new DefaultUnauthorizedRequestHandler();
+            ExceptionHandler = new ApiExceptionHandler();
+            ModelStateValidationErrorHandler = new ApiModelStateValidationErrorHandler();
+            UnauthorizedRequestHandler = new ApiUnauthorizedRequestHandler();
             this.AssociateFilter = attr;
         }
         /// <summary>

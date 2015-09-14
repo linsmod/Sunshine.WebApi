@@ -10,7 +10,7 @@ namespace Sunshine.WebApiLib.Handlers
     /// <summary>
     /// 默认Api异常处理器
     /// </summary>
-    public class DefaultApiExceptionHandler : IApiExceptionHandler
+    public class ApiExceptionHandler : IApiExceptionHandler
     {
         public ApiResult Handle(Exception exception)
         {
