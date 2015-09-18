@@ -11,7 +11,7 @@ namespace Sunshine.WebApiLib.Infrastructure.Authorization
     /// <summary>
     /// 用户认证信息预绑定默认实现
     /// </summary>
-    public class DefaultApiUserAuthorizeAttribute : AuthorizeAttribute
+    public class DefaultApiUserAuthorizeAttribute : ApiAuthorizeAttribute
     {
         DefaultApiUserIdBinding UserBinding { get; set; }
 

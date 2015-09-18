@@ -69,16 +69,31 @@ namespace Sunshine.WebApiLib.Protocols
         {
             get { return this.msg; }
         }
-
         /// <summary>
         /// 0 for success request
         /// </summary>
-        public static ApiResult Success = new ApiResult();
+        public static ApiResult Success(string message = "")
+        {
+            return new ApiResult(0, message);
+        }
 
         /// <summary>
         /// 401 for unauthorized request
         /// </summary>
-        public static ApiResult Unauthorized = new ApiResult(401, "Unauthorized");
+        public static ApiResult Unauthorized(string message = "Unauthorized")
+        {
+            return new ApiResult(401, message);
+        }
+
+        /// <summary>
+        /// 500 for internal error with a message
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public static ApiResult Error(string message = "处理请求时发生了一个错误。")
+        {
+            return new ApiResult(500, message);
+        }
     }
 
     /// <summary>
@@ -86,6 +101,11 @@ namespace Sunshine.WebApiLib.Protocols
     /// </summary>
     public class ApiResultWithData : ApiResult, IApiData
     {
+        public ApiResultWithData() { }
+        public ApiResultWithData(object data)
+        {
+            this.data = data;
+        }
         public object data { get; set; }
 
         object IApiData.Data

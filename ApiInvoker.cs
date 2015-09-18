@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-
+using System.Linq;
 namespace Sunshine.WebApiLib
 {
     /// <summary>
@@ -52,6 +52,7 @@ namespace Sunshine.WebApiLib
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             return resp.data;
         }
+
 
         /// <summary>
         /// 执行Get获取支持翻页的列表
@@ -122,6 +123,7 @@ namespace Sunshine.WebApiLib
         /// <typeparam name="TRequest">提交的数据类型</typeparam>
         /// <param name="url">请求地址</param>
         /// <param name="req">提交的内容</param>
+        /// <param name="handler"></param>
         /// <returns></returns>
         public async Task<TResponse> ExecutePost<TResponse, TRequest>(string url, TRequest req)
             where TRequest : class
@@ -137,7 +139,9 @@ namespace Sunshine.WebApiLib
 
             var resp = await ret.Content.ReadAsAsync<ApiResponse<TResponse>>();
             if (resp.code != 0)
+            {
                 ThrowApiResultException((IApiResult)resp);
+            }
             return resp.data;
         }
 
@@ -249,7 +253,7 @@ namespace Sunshine.WebApiLib
                 client.DefaultRequestHeaders.Authorization = null;
             }
             else
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Session", session);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
         }
 
 

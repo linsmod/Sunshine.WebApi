@@ -17,13 +17,13 @@ namespace Sunshine.WebApiLib.Infrastructure.Authorization
         /// <summary>
         /// 关联一个认证特性，因为要获取角色信息和执行认证逻辑（通过OnAuthorization方法）
         /// </summary>
-        protected AuthorizeAttribute AuthAttribute { get; set; }
+        protected ApiAuthorizeAttribute AuthAttribute { get; set; }
 
         /// <summary>
         /// 用户认证主体信息预先绑定基类，用于实现将用户标识绑定到Http上下文及线程上下文的功能
         /// </summary>
         /// <param name="authAttribute"></param>
-        public ApiAuthorizationIdentityBinding(AuthorizeAttribute authAttribute)
+        public ApiAuthorizationIdentityBinding(ApiAuthorizeAttribute authAttribute)
         {
             this.AuthAttribute = authAttribute;
         }
@@ -70,7 +70,7 @@ namespace Sunshine.WebApiLib.Infrastructure.Authorization
                 bool isAnonymous = attr.Any(a => a is AllowAnonymousAttribute);
                 if (!isAnonymous)
                 {
-                    ctx.Response = ctx.Request.CreateResponse<ApiResult>(HttpStatusCode.OK, ApiResult.Unauthorized);
+                    ctx.Response = ctx.Request.CreateResponse<ApiResult>(HttpStatusCode.OK, ApiResult.Unauthorized());
                 }
             }
         }

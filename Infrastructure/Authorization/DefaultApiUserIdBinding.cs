@@ -20,7 +20,7 @@ namespace Sunshine.WebApiLib.Infrastructure.Authorization
         /// 用户Id绑定器默认实现
         /// </summary>
         /// <param name="authAttribute">关联的用于预先认证的特性实例</param>
-        public DefaultApiUserIdBinding(AuthorizeAttribute authAttribute)
+        public DefaultApiUserIdBinding(ApiAuthorizeAttribute authAttribute)
             : base(authAttribute)
         {
 
